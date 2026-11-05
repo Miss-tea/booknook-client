@@ -1,4 +1,7 @@
 import { Poppins } from "next/font/google";
+import { Toaster } from "react-hot-toast";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -15,7 +18,20 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" data-theme="light" suppressHydrationWarning>
-      <body className={`${poppins.className} min-h-screen`}>{children}</body>
+      <head>
+        {/* Sets the saved theme before the page paints, so there is no flash */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var t=localStorage.getItem("theme");if(t){document.documentElement.setAttribute("data-theme",t)}}catch(e){}`,
+          }}
+        />
+      </head>
+      <body className={`${poppins.className} flex min-h-screen flex-col`}>
+        <Navbar />
+        <main className="flex-1">{children}</main>
+        <Footer />
+        <Toaster position="top-center" toastOptions={{ duration: 3000 }} />
+      </body>
     </html>
   );
 }
